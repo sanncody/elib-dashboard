@@ -23,7 +23,7 @@ const LoginPage = () => {
       // redirect to dashboard
       navigate("/dashboard/home");
     },
-  })
+  });
 
   const handleLoginSubmit = async () => {
     const email = emailRef.current?.value;
