@@ -2,17 +2,42 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { login } from "@/http/api";
+import { useMutation } from "@tanstack/react-query";
 import { useRef } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { toast } from "sonner";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+
+  const mutation = useMutation({
+    mutationFn: login,
+    onSuccess: () => {
+      // Invalidate and refetch
+      console.log("Login Successful!!");
+      // redirect to dashboard
+      navigate("/dashboard/home");
+    },
+  })
 
   const handleLoginSubmit = async () => {
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
     console.log("data", { email, password });
+
+    // For data fetching, we use useQuery hook.
+    // For data sending to server, we use mutation
+
+    if (!email || !password) {
+      toast.error("Email and password is required");
+      return '';
+    }
+
+    mutation.mutate({ email, password });
 
     // Make server call
     // const data = await axios. 

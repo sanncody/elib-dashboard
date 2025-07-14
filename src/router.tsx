@@ -4,7 +4,7 @@ import HomePage from "@/pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardLayout from "./layouts/DashboardLayout";
 import BookPage from "./pages/BookPage";
-import AuthLayout from "./layouts/Authlayout";
+import AuthLayout from "./layouts/AuthLayout";
 
 
 const router = createBrowserRouter([
