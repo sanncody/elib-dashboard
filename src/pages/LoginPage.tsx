@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { login } from "@/http/api";
 import { useMutation } from "@tanstack/react-query";
+import { LoaderCircle } from "lucide-react";
 import { useRef } from "react";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
@@ -50,9 +51,7 @@ const LoginPage = () => {
           <CardTitle className="text-2xl mb-1">Login</CardTitle>
           <CardDescription>
             Enter your email below to login to your account. <br />
-            {/* {mutation.isError && (
-              <span className="text-red-500 text-sm">{'Something went wrong'}</span>
-            )} */}
+            {mutation.isPending && <div className="text-md text-pink-300">Loading...</div>}
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
@@ -76,11 +75,11 @@ const LoginPage = () => {
             <Button
               onClick={handleLoginSubmit}
               className="w-full"
-            // disabled={mutation.isPending}
+              disabled={mutation.isPending}
             >
-              {/*  {mutation.isPending && <LoaderCircle className="animate-spin" />} */}
+              {mutation.isPending && <LoaderCircle className="animate-spin" />}
 
-              <span className="ml-2">Sign in</span>
+              <span>Sign in</span>
             </Button>
 
             <div className="mt-4 text-center text-sm">
