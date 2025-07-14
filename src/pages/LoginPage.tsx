@@ -40,8 +40,6 @@ const LoginPage = () => {
 
     mutation.mutate({ email, password });
 
-    // Make server call
-    // const data = await axios. 
   };
 
   return (
@@ -51,7 +49,8 @@ const LoginPage = () => {
           <CardTitle className="text-2xl mb-1">Login</CardTitle>
           <CardDescription>
             Enter your email below to login to your account. <br />
-            {mutation.isPending && <div className="text-md text-pink-300">Loading...</div>}
+            {/* {mutation.isPending && <div className="text-md text-pink-300">Loading...</div>} */}
+            {mutation.isError && <div className="text-red-500 text-sm pt-2">{"Something went wrong"}</div>}
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
