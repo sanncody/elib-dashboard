@@ -8,18 +8,22 @@ import { LoaderCircle } from "lucide-react";
 import { useRef } from "react";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
+import useTokenStore from "@/store/tokenstore";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const setToken = useTokenStore((state) => state.setToken);
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const mutation = useMutation({
     mutationFn: login,
-    onSuccess: () => {
+    onSuccess: (response) => {
       // Invalidate and refetch
       console.log("Login Successful!!");
+      setToken(response.data.accessToken);
+
       // redirect to dashboard
       navigate("/dashboard/home");
     },
