@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { register } from "@/http/api";
+import useTokenStore from "@/store/tokenstore";
 import { useMutation } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
 import { useRef } from "react";
@@ -12,6 +13,7 @@ import { toast } from "sonner";
 
 const RegisterPage = () => {
     const navigate = useNavigate();
+    const setToken = useTokenStore((state) => state.setToken);
 
     const nameRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
@@ -19,9 +21,11 @@ const RegisterPage = () => {
 
     const mutation = useMutation({
         mutationFn: register,
-        onSuccess: () => {
+        onSuccess: (response) => {
             // Invalidate and refetch
             console.log("Register Successful!!");
+
+            setToken(response.data.accessToken);
             // redirect to dashboard
             navigate("/dashboard/home");
         },
