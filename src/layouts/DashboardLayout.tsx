@@ -2,18 +2,24 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link, Navigate, Outlet } from "react-router";
-import { Bell, CircleUser, Home, LineChart, Menu, Package, Package2, Search, ShoppingCart, Users } from 'lucide-react';
+import { Bell, Home, LineChart, Menu, Package, Package2, Search, ShoppingCart, Users } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import useTokenStore from "@/store/tokenstore";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const DashboardLayout = () => {
-    const token = useTokenStore(state => state.token);
+    const { token, setToken } = useTokenStore(state => state);
 
     if (!token) {
         return <Navigate to={"/auth/login"} replace />
     }
+
+    const logout = () => {
+        console.log("Logging out...");
+        setToken("");
+    };
 
     return (
         <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -149,8 +155,11 @@ const DashboardLayout = () => {
                     </div>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="secondary" size="icon" className="rounded-full">
-                                <CircleUser className="h-5 w-5" />
+                            <Button variant="secondary" size="icon" className="rounded-full hover:cursor-pointer grayscale">
+                                <Avatar className="h-8 w-8">
+                                    <AvatarImage src={"https://github.com/shadcn.png"} alt="@shadcn" />
+                                    <AvatarFallback>CN</AvatarFallback>
+                                </Avatar>
                                 <span className="sr-only">Toggle user menu</span>
                             </Button>
                         </DropdownMenuTrigger>
@@ -161,9 +170,9 @@ const DashboardLayout = () => {
                             <DropdownMenuItem>Support</DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>
-                                <Link to={"/auth/login"}>
+                                <Button onClick={logout} className="mx-auto hover:cursor-pointer">
                                     Logout
-                                </Link>
+                                </Button>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
