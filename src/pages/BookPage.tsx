@@ -19,8 +19,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { CirclePlus, MoreHorizontal } from "lucide-react";
 import type { Book } from "@/types";
+import { Link } from "react-router";
 
 const BookPage = () => {
   // todo: add loading spinner, and error message
@@ -35,7 +36,7 @@ const BookPage = () => {
   
   return (
     <div>
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -47,9 +48,12 @@ const BookPage = () => {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <Button>
-          Add Book
-        </Button>
+        <Link to={"/dashboard/books/create"}>
+          <Button className="hover:cursor-pointer">
+            <CirclePlus size={20} />
+            <span>Add Book</span>
+          </Button>
+        </Link>
       </div>
 
       <Card className="mt-6">
