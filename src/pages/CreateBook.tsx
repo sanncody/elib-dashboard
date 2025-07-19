@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Check, CircleX } from "lucide-react";
 
 const CreateBook = () => {
@@ -51,7 +53,14 @@ const CreateBook = () => {
                 <CardContent>
                     <form action="">
                         {/* we'll add description field and then write this */}
+                        <div className="grid gap-6">
+                            <div className="grid gap-3">
+                                <Label htmlFor="name">Name</Label>
+                                <Input id="name" type="text" className="w-full" defaultValue="Book Controller"/>
+                            </div>
+                        </div>
                     </form>
+                    
                 </CardContent>
             </Card>
         </section>
