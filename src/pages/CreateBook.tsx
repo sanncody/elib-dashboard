@@ -13,10 +13,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Check, CircleX } from "lucide-react";
+import { Check, CircleX, LoaderCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { createBook } from "@/http/api";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { Link, useNavigate } from "react-router";
 
 const formSchema = z.object({
     title: z.string().min(2, { 
@@ -37,6 +39,7 @@ const formSchema = z.object({
 });
 
 const CreateBook = () => {
+    const navigate = useNavigate();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -49,10 +52,16 @@ const CreateBook = () => {
     const coverImageRef = form.register('coverImage');
     const fileRef = form.register('file');
 
+    const queryClient = useQueryClient();
+
     const mutation = useMutation({
         mutationFn: createBook,
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['book'] });
+
             console.log("Book created successfully");
+
+            navigate("/dashboard/books");
         }
     });
 
@@ -69,7 +78,7 @@ const CreateBook = () => {
 
         mutation.mutate(formdata);
 
-        console.log(values);
+        toast.success("Book Created Successfully!!");
     }
 
     return (
@@ -93,11 +102,14 @@ const CreateBook = () => {
                             </BreadcrumbList>
                         </Breadcrumb>
                         <div className="flex items-center gap-4">
-                            <Button className="bg-red-500 hover:bg-red-400 hover:cursor-pointer">
-                                <CircleX size={20} />
-                                <span className="">Cancel</span>
-                            </Button>
-                            <Button type="submit" className="bg-blue-500 hover:bg-blue-400 hover:cursor-pointer">
+                            <Link to={"/dashboard/books"}>
+                                <Button className="bg-red-500 hover:bg-red-400 hover:cursor-pointer">
+                                    <CircleX size={20} />
+                                    <span className="">Cancel</span>
+                                </Button>
+                            </Link>
+                            <Button type="submit" className="bg-blue-500 hover:bg-blue-400 hover:cursor-pointer" disabled={mutation.isPending}>
+                                {mutation.isPending && <LoaderCircle className="animate-spin" />}
                                 <Check />
                                 <span>Submit</span>
                             </Button>
