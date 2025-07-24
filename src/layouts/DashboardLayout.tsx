@@ -2,13 +2,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link, Navigate, NavLink, Outlet } from "react-router";
-import { Bell, Home, LineChart, Menu, Package, Package2, Search, ShoppingCart, Users } from 'lucide-react';
+import { Bell, BookOpenText, Home, LineChart, Menu, MessageCircle, Package, Package2, Search, ShoppingCart, Users } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import useTokenStore from "@/store/tokenstore";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ModeToggle } from "@/components/mode-toggle";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const DashboardLayout = () => {
     const { token, setToken } = useTokenStore(state => state);
@@ -30,11 +31,46 @@ const DashboardLayout = () => {
                         <Link to="/dashboard/home" className="flex items-center gap-2 font-semibold">
                             <Package2 className="h-6 w-6" />
                             <span className="">Coder's Library</span>
-                        </Link>
-                        <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
-                            <Bell className="h-4 w-4" />
-                            <span className="sr-only">Toggle notifications</span>
-                        </Button>
+                        </Link>                            
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button variant="outline" size="icon" className="ml-auto h-8 w-8 hover:cursor-pointer">
+                                    <Bell className="h-4 w-4" />
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-80 p-4 space-y-3">
+                                <div className="max-w-full font-semibold text-sm text-gray-900 dark:text-gray-100 mb-4 pb-2 border-b-2">
+                                    Notifications
+                                </div>
+
+                                {/* Dummy Notification 1 */}
+                                <div className="flex items-start space-x-3 rounded-md p-2 hover:bg-muted hover:cursor-pointer">
+                                    <BookOpenText className="text-muted-foreground mt-1 h-5 w-5" />
+                                    <div>
+                                        <p className="text-sm font-medium">New Book Added: "The AI Era"</p>
+                                        <p className="text-xs text-muted-foreground">2 minutes ago</p>
+                                    </div>
+                                </div>
+
+                                {/* Dummy Notification 2 */}
+                                <div className="flex items-start space-x-3 rounded-md p-2 hover:bg-muted hover:cursor-pointer">
+                                    <MessageCircle className="text-muted-foreground mt-1 h-5 w-5" />
+                                    <div>
+                                        <p className="text-sm font-medium">You have 3 new comments</p>
+                                        <p className="text-xs text-muted-foreground">10 minutes ago</p>
+                                    </div>
+                                </div>
+
+                                {/* Dummy Notification 3 */}
+                                <div className="flex items-start space-x-3 rounded-md p-2 hover:bg-muted hover:cursor-pointer">
+                                    <Bell className="text-muted-foreground mt-1 h-5 w-5" />
+                                    <div>
+                                        <p className="text-sm font-medium">Reminder: Review pending books</p>
+                                        <p className="text-xs text-muted-foreground">1 hour ago</p>
+                                    </div>
+                                </div>
+                            </PopoverContent>
+                        </Popover>
                     </div>
                     <div className="flex-1">
                         <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
@@ -82,7 +118,7 @@ const DashboardLayout = () => {
                                 <span className="sr-only">Toggle navigation menu</span>
                             </Button>
                         </SheetTrigger>
-                        <SheetContent side="left" className="flex flex-col">
+                        <SheetContent side="left" className="flex flex-col h-full">
                             <nav className="grid gap-2 text-lg font-medium">
                                 <Link
                                     to="#"
