@@ -23,10 +23,11 @@ import { Button } from "@/components/ui/button";
 import { CirclePlus, MoreHorizontal } from "lucide-react";
 import type { Book } from "@/types";
 import { Link } from "react-router";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const BookPage = () => {
   // todo: add loading spinner, and error message
-  
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data, isLoading, isError } = useQuery({
     queryKey: ['books'],
@@ -34,7 +35,7 @@ const BookPage = () => {
     staleTime: 10000, // in milliseconds
   });
   console.log("DAta", data);
-  
+
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -79,8 +80,32 @@ const BookPage = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data?.data.map((book: Book) => {
-                return (
+              {!data ? (
+                // Show 5 skeleton rows while loading
+                Array.from({ length: 5 }).map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="hidden sm:table-cell">
+                      <Skeleton className="h-16 w-16 rounded-md" />
+                    </TableCell>
+                    <TableCell className="font-medium">
+                      <Skeleton className="h-4 w-32" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-20" />
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      <Skeleton className="h-4 w-24" />
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      <Skeleton className="h-4 w-16" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-8" />
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                data.data.map((book: Book) => (
                   <TableRow key={book._id}>
                     <TableCell className="hidden sm:table-cell">
                       <img
@@ -100,7 +125,7 @@ const BookPage = () => {
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
                       {book.createdAt
-                        ? new Date(book.createdAt).toISOString().split('T')[0]
+                        ? new Date(book.createdAt).toISOString().split("T")[0]
                         : ""}
                     </TableCell>
                     <TableCell>
@@ -109,7 +134,8 @@ const BookPage = () => {
                           <Button
                             aria-haspopup="true"
                             size="icon"
-                            variant="ghost">
+                            variant="ghost"
+                          >
                             <MoreHorizontal className="h-4 w-4" />
                             <span className="sr-only">Toggle menu</span>
                           </Button>
@@ -122,8 +148,8 @@ const BookPage = () => {
                       </DropdownMenu>
                     </TableCell>
                   </TableRow>
-                );
-              })}
+                ))
+              )}
             </TableBody>
           </Table>
         </CardContent>
@@ -132,7 +158,7 @@ const BookPage = () => {
             Showing <strong>1-10</strong> of <strong>32</strong> products
           </div>
         </CardFooter>
-      </Card>      
+      </Card>
     </div>
   )
 }
