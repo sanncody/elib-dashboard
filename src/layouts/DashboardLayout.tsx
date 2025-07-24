@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import useTokenStore from "@/store/tokenstore";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const DashboardLayout = () => {
     const { token, setToken } = useTokenStore(state => state);
@@ -153,6 +154,7 @@ const DashboardLayout = () => {
                             </div>
                         </form>
                     </div>
+                    <ModeToggle />
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="secondary" size="icon" className="rounded-full hover:cursor-pointer grayscale">
