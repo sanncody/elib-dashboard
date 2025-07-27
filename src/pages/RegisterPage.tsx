@@ -57,7 +57,7 @@ const RegisterPage = () => {
                     <CardDescription>Enter your information to create an account</CardDescription>
                     {mutation.isError && (
                       <span className="text-red-500 text-sm">{'Something went wrong'}</span>
-                  )}
+                    )}
                 </CardHeader>
                 <CardContent>
                     <div className="grid gap-4">

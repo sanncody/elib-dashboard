@@ -20,21 +20,17 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { CirclePlus, MoreHorizontal } from "lucide-react";
+import { AlertCircle, CirclePlus, LoaderCircle, MoreHorizontal } from "lucide-react";
 import type { Book } from "@/types";
 import { Link } from "react-router";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const BookPage = () => {
-  // todo: add loading spinner, and error message
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data, isLoading, isError } = useQuery({
     queryKey: ['books'],
     queryFn: getBooks,
     staleTime: 10000, // in milliseconds
   });
-  console.log("DAta", data);
 
   return (
     <div>
@@ -64,8 +60,22 @@ const BookPage = () => {
           <CardDescription>
             Manage your books and view their sales performance.
           </CardDescription>
+          {isError && (
+            <div className="flex items-center justify-center gap-2 py-4 text-red-500">
+              <AlertCircle className="size-4" />
+              <span className="text-sm">Failed to load books. Please try again.</span>
+            </div>
+          )}
+
         </CardHeader>
         <CardContent>
+          {isLoading && !data && (
+            <div className="flex items-center justify-center gap-2 py-4">
+              <LoaderCircle className="size-4 animate-spin text-muted-foreground" />
+              <span className="text-md font-bold text-muted-foreground">Loading books...</span>
+            </div>
+          )}
+
           <Table>
             <TableHeader>
               <TableRow>
