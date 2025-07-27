@@ -88,7 +88,7 @@ const DashboardLayout = () => {
                             </NavLink>
                         </nav>
                     </div>
-                    <div className="mt-auto p-4 fixed bottom-0 w-70">
+                    <div className="mt-auto fixed bottom-5 left-5 md:w-55">
                         <Card x-chunk="dashboard-02-chunk-0">
                             <CardHeader className="p-2 pt-0 md:p-4">
                                 <CardTitle>Upgrade to Pro</CardTitle>

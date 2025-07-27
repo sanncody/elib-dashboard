@@ -1,5 +1,16 @@
-import { getBooks } from "@/http/api";
-import { useQuery } from "@tanstack/react-query";
+import { deleteBook, getBooks } from "@/http/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -24,13 +35,34 @@ import { AlertCircle, CirclePlus, LoaderCircle, MoreHorizontal } from "lucide-re
 import type { Book } from "@/types";
 import { Link } from "react-router";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
+import { useState } from "react";
 
 const BookPage = () => {
+  const [open, setOpen] = useState(false);
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ['books'],
     queryFn: getBooks,
     staleTime: 10000, // in milliseconds
   });
+
+  const queryClient = useQueryClient();
+
+  const deleteBookMutation = useMutation({
+    mutationFn: deleteBook,
+    onSuccess: () => {
+      toast.success("Book deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ['books'] }); // Refetch book list
+    },
+    onError: () => {
+      toast.error("Failed to delete the book");
+    },
+  });
+
+  const handleDeleteBook = (bookId: string) => {
+    deleteBookMutation.mutate(bookId);
+  };
 
   return (
     <div>
@@ -152,8 +184,46 @@ const BookPage = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button variant="outline" className="mx-auto mt-2 w-full">Edit</Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Are you sure to edit it?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    This will edit the features of book and update in our database too.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction>Continue</AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onSelect={() => setOpen(true)}>
+                            <Button variant="outline" className="mx-auto w-full">Delete</Button>
+                          </DropdownMenuItem>
+
+                          <AlertDialog open={open} onOpenChange={setOpen}>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Are you sure to delete this book?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will permanently delete your
+                                  book and remove your book data from database.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel onClick={() => setOpen(false)}>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDeleteBook(book._id)}>
+                                  Continue
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
