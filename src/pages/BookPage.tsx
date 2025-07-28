@@ -218,7 +218,10 @@ const BookPage = () => {
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel onClick={() => setOpen(false)}>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => handleDeleteBook(book._id)}>
+                                <AlertDialogAction onClick={() => {
+                                  handleDeleteBook(book._id);
+                                  setOpen(false)
+                                }}>
                                   Continue
                                 </AlertDialogAction>
                               </AlertDialogFooter>
@@ -238,8 +241,8 @@ const BookPage = () => {
             Showing <strong>1-10</strong> of <strong>32</strong> products
           </div>
         </CardFooter>
-      </Card>
-    </div>
+      </Card >
+    </div >
   )
 }
 
